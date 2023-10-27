@@ -11,6 +11,10 @@ export const DASHBOARD_ROUTES: Routes = [
         loadComponent: () => import( './dashboard.component').then( C => C.DashboardComponent ),
         children:[
           {
+            path: '',
+            loadComponent: () => import( './components/home/home.component').then( C => C.HomeComponent )
+          },
+          {
             path: 'home',
             loadComponent: () => import( './components/home/home.component').then( C => C.HomeComponent )
           },
