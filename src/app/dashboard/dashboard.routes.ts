@@ -18,6 +18,10 @@ export const DASHBOARD_ROUTES: Routes = [
             path: 'home',
             loadComponent: () => import( './components/home/home.component').then( C => C.HomeComponent )
           },
+          {
+            path: 'category',
+            loadComponent: () => import( '../category/components/category/category.component').then( C => C.CategoryComponent )
+          },
         ]
       }
     ]
