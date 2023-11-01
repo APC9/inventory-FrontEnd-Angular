@@ -23,4 +23,11 @@ export class CategoryService {
     )
   }
 
+  createCategory(name: string, description: string){
+    return  this.httpClient.post<CategoryResponse>(`${this.baseUrl}/categories`, { name, description })
+      .pipe(
+        map( resp => resp.categoryResponse.category)
+      )
+  }
+
 }

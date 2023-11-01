@@ -12,3 +12,4 @@ export const errorLoadCategories = createAction(
  '[Category Component] Error Load categories',
  props<{ payload: any }>()
 );
+
