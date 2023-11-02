@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationComponent } from '../../../dashboard/shared/confirmation/confirmation.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 @Component({
@@ -27,6 +28,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [ 'id', 'name', 'description', 'actions'];
   dataSource = new MatTableDataSource<Category>();
 
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
   private store = inject( Store<categoriesState>);
   private clearSupcriptions!: Subscription;
@@ -38,6 +41,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       .subscribe( ({categories}) =>{
         this.categories = categories;
         this.dataSource = new MatTableDataSource<Category>(this.categories)
+        this.dataSource.paginator = this.paginator;
       })
 
     this.store.dispatch( loadCategories() )
@@ -114,7 +118,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     if(term === '') {
       this.store.dispatch( loadCategories() )
     }
-    
+
     this.store.dispatch(searchCategories({term}))
 
     if(this.categories.length === 0) {
