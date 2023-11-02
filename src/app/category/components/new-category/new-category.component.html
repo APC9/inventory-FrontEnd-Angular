@@ -1,4 +1,5 @@
-<h2 mat-dialog-title>Agregar nueva Categoria</h2>
+<h2 mat-dialog-title *ngIf="!dialogData">Agregar nueva Categoria</h2>
+<h2 mat-dialog-title *ngIf="dialogData">Actualizar Categoria</h2>
 
 <mat-dialog-content>
 

@@ -48,7 +48,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   openCategoryDialog(){
     const dialogRef = this.dialog.open( NewCategoryComponent, {
-      width: '450px'
+      width: '450px',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -62,6 +63,29 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
       this.openSnackBar("Categoria Agregada", "Exitosa")
       this.store.dispatch( loadCategories() )
+    });
+  }
+
+  edit(category:Category){
+    const { id, name, description} = category;
+
+    const dialogRef = this.dialog.open( NewCategoryComponent, {
+      data: { id, name, description},
+      width: '450px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if( result === 1) {
+        this.openSnackBar("Categoria Actualizada", "Exitosa")
+        this.store.dispatch( loadCategories() )
+        return;
+      };
+
+      if( result === 2 ){
+        this.openSnackBar("Error al Guardar Categoria", "Error")
+        return;
+      }
     });
   }
 

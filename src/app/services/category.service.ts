@@ -30,4 +30,12 @@ export class CategoryService {
       )
   }
 
+  updateCategory( categoy: Category){
+    const { id, ...body } = categoy
+    return this.httpClient.put<CategoryResponse>(`${this.baseUrl}/categories/${id}`, { ...body } )
+      .pipe(
+        map( resp => resp.categoryResponse.category[0])
+      )
+  }
+
 }

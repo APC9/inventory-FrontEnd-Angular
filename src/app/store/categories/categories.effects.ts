@@ -16,12 +16,26 @@ export class CategoriesEffects{
     .pipe(
        ofType( categoriesActions.loadCategories ),
        mergeMap( ()=> this.categoryService.getAllCategories()
-          .pipe(
-             map( (categories: Category[] ) => categoriesActions.loadCategoriesSucces({categories}) ),
-             catchError( (error)=> of( categoriesActions.errorLoadCategories({payload: error}) ) )
-            ))
-          )
-       )
+        .pipe(
+          map( (categories: Category[] ) => categoriesActions.loadCategoriesSucces({categories}) ),
+          catchError( (error)=> of( categoriesActions.errorLoadCategories({payload: error}) ) )
+        )
+      )
+    )
+  )
+
+  updateCategories$ = createEffect( () => this.actions$
+    .pipe(
+      ofType( categoriesActions.updateCategories ),
+      mergeMap( ({category}) => this.categoryService.updateCategory(category)
+        .pipe(
+          map( (category: Category ) => categoriesActions.updateCategoriesSucces({category}) ),
+          catchError( (error)=> of( categoriesActions.updateCategoriesError({ payload: error}) ))
+        )
+      )
+    )
+  )
+
 }
 
 
