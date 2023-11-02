@@ -36,6 +36,18 @@ export class CategoriesEffects{
     )
   )
 
+  deleteCategories$ = createEffect( () => this.actions$
+    .pipe(
+      ofType( categoriesActions.deleteCategories ),
+      mergeMap( ({id}) => this.categoryService.deleteCategory(id)
+        .pipe(
+          map( () => categoriesActions.deleteCategoriesSucces({id}) ),
+          catchError( (error)=> of( categoriesActions.deleteCategoriesError({ payload: error}) ))
+        )
+      )
+    )
+  )
+
 }
 
 

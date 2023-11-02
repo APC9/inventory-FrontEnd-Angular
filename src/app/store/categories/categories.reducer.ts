@@ -1,7 +1,7 @@
 
 import { Action, createReducer, on } from '@ngrx/store';
 import { Category } from 'src/app/models/category.model';
-import { errorLoadCategories, loadCategories, loadCategoriesSucces, updateCategories, updateCategoriesError, updateCategoriesSucces } from './categories.actions';
+import * as actions from './categories.actions';
 
 
 export interface categoriesState{
@@ -19,18 +19,19 @@ export const initialState: categoriesState = {
 
 const _categoriesReducer = createReducer(
   initialState,
-  on( loadCategories, (state) => ({ ...state, isLoading: true }) ),
-  on( loadCategoriesSucces, (state, {categories}) => ({
+  on( actions.loadCategories, (state) => ({ ...state, isLoading: true }) ),
+  on( actions.loadCategoriesSucces, (state, {categories}) => ({
     ...state,
     categories: [...categories],
+    isLoading: false
   })),
-  on( errorLoadCategories, (state, {payload}) => ({
+  on( actions.errorLoadCategories, (state, {payload}) => ({
     ...state,
     error: payload,
   })),
 
   /* update */
-  on( updateCategories, (state, { category}) =>{
+  on( actions.updateCategories, (state, { category}) =>{
     const updateCategory = state.categories.map( categ => categ.id === category.id ? { ...categ, ...category} : categ )
     return{
       ...state,
@@ -38,8 +39,7 @@ const _categoriesReducer = createReducer(
       isLoading: true
     }
   }),
-
-  on( updateCategoriesSucces, (state, { category}) =>{
+  on( actions.updateCategoriesSucces, (state, { category}) =>{
     const updateCategory = state.categories.map( categ => categ.id === category.id ? { ...categ, ...category} : categ )
     return{
       ...state,
@@ -47,11 +47,26 @@ const _categoriesReducer = createReducer(
       isLoading: false
     }
   }),
-
-  on( updateCategoriesError, (state, {payload}) =>({
+  on( actions.updateCategoriesError, (state, {payload}) =>({
     ...state,
-    errors: payload
-  }))
+    error: payload
+  })),
+
+  /* Delete */
+  on( actions.deleteCategories, (state, { id }) =>({
+    ...state,
+    categories: state.categories.filter( categ => categ.id !== id),
+    isLoading: true
+  })),
+  on( actions.deleteCategoriesSucces, (state, { id }) =>({
+    ...state,
+    categories: state.categories.filter( categ => categ.id !== id),
+    isLoading: false
+  })),
+  on( actions.deleteCategoriesError, (state, {payload}) =>({
+    ...state,
+    error: payload
+  })),
 );
 
 export function categoriesReducer(state: categoriesState | undefined, action: Action) {

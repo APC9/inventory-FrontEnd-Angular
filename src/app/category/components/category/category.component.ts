@@ -11,6 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationComponent } from '../../../dashboard/shared/confirmation/confirmation.component';
 
 
 @Component({
@@ -84,6 +85,26 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
       if( result === 2 ){
         this.openSnackBar("Error al Guardar Categoria", "Error")
+        return;
+      }
+    });
+  }
+
+  delete(id: number){
+    const dialogRef = this.dialog.open( ConfirmationComponent, {
+      data: { id },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if( result === 1) {
+        this.openSnackBar("Categoria Eliminada", "Exitosa")
+        this.store.dispatch( loadCategories() )
+        return;
+      };
+
+      if( result === 2 ){
+        this.openSnackBar("Error al Eliminar Categoria", "Error")
         return;
       }
     });

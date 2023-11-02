@@ -38,4 +38,8 @@ export class CategoryService {
       )
   }
 
+  deleteCategory(id:number){
+    return this.httpClient.delete<CategoryResponse>(`${this.baseUrl}/categories/${id}`)
+  }
+
 }

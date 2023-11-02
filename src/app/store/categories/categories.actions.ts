@@ -33,4 +33,18 @@ export const updateCategoriesError = createAction(
   props<{ payload: any }>()
 )
 
+/* deleteCategories */
+
+export const deleteCategories = createAction(
+  '[Category Component] Delete categories',
+  props<{ id: number }>()
+)
+export const deleteCategoriesSucces = createAction(
+  '[Category Component] Delete categories Succes',
+  props<{ id: number }>()
+)
+export const deleteCategoriesError = createAction(
+  '[Category Component] Delete categories Error',
+  props<{ payload: any }>()
+)
 
