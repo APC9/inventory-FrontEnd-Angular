@@ -67,7 +67,19 @@ const _categoriesReducer = createReducer(
     ...state,
     error: payload
   })),
+
+  /* search */
+  on( actions.searchCategories, (state, { term }) =>({
+    ...state,
+    categories: state.categories.filter( categ =>  matchesTerm(categ, term)),
+    isLoading: false
+  })),
 );
+
+
+const matchesTerm = ( category: Category, term: string) => {
+  return category.name.toLowerCase().includes(term.toLowerCase())
+}
 
 export function categoriesReducer(state: categoriesState | undefined, action: Action) {
   return _categoriesReducer(state, action);

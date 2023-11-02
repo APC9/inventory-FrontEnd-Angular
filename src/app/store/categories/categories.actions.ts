@@ -48,3 +48,9 @@ export const deleteCategoriesError = createAction(
   props<{ payload: any }>()
 )
 
+/* search categories */
+export const searchCategories = createAction(
+  '[Category Component] Search categories',
+  props<{ term: string }>()
+)
+

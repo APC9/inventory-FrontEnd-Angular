@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { categoriesState } from '../../../store/categories/categories.reducer';
-import { loadCategories } from '../../../store/categories/categories.actions';
+import { loadCategories, searchCategories } from '../../../store/categories/categories.actions';
 import { Category } from '../../../interfaces/categoryResponse.interface';
 import { SharedModule } from '../../../shared/shared.module';
 import { MatTableDataSource } from '@angular/material/table';
@@ -108,6 +108,18 @@ export class CategoryComponent implements OnInit, OnDestroy {
         return;
       }
     });
+  }
+
+  search(term: string) {
+    if(term === '') {
+      this.store.dispatch( loadCategories() )
+    }
+    
+    this.store.dispatch(searchCategories({term}))
+
+    if(this.categories.length === 0) {
+      this.store.dispatch( loadCategories() )
+    }
   }
 
   private openSnackBar( msg: string, action: string ) {
