@@ -14,8 +14,6 @@ export class CategoryService {
   httpClient = inject(HttpClient);
   private baseUrl = environment.URL_API;
 
-  constructor() { }
-
   getAllCategories(): Observable<Category[]> {
     return this.httpClient.get<CategoryResponse>( `${this.baseUrl}/categories`)
     .pipe(

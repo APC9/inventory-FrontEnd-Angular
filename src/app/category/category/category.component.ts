@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
-import { categoriesState } from '../../../store/categories/categories.reducer';
-import { loadCategories, searchCategories } from '../../../store/categories/categories.actions';
-import { Category } from '../../../interfaces/categoryResponse.interface';
-import { SharedModule } from '../../../shared/shared.module';
+import { categoriesState } from '../../store/categories/categories.reducer';
+import { loadCategories, searchCategories } from '../../store/categories/categories.actions';
+import { Category } from '../../interfaces/categoryResponse.interface';
+import { SharedModule } from '../../shared/shared.module';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmationComponent } from '../../../dashboard/shared/confirmation/confirmation.component';
+import { ConfirmationComponent } from '../../dashboard/shared/confirmation/confirmation.component';
 import { MatPaginator } from '@angular/material/paginator';
 
 

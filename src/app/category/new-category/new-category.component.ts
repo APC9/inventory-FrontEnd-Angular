@@ -5,12 +5,12 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Store } from '@ngrx/store';
-import { categoriesState } from '../../../store/categories/categories.reducer';
-import { updateCategories } from '../../../store/categories/categories.actions';
+import { categoriesState } from '../../store/categories/categories.reducer';
+import { updateCategories } from '../../store/categories/categories.actions';
 
-import { CategoryService } from '../../../services/category.service';
-import { Category } from '../../../models/category.model';
-import { SharedModule } from '../../../shared/shared.module';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models/category.model';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @Component({

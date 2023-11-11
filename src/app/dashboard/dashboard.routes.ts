@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './dashboard.component';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
@@ -20,7 +18,11 @@ export const DASHBOARD_ROUTES: Routes = [
           },
           {
             path: 'category',
-            loadComponent: () => import( '../category/components/category/category.component').then( C => C.CategoryComponent )
+            loadComponent: () => import( '../category/category/category.component').then( C => C.CategoryComponent )
+          },
+          {
+            path: 'product',
+            loadComponent: () => import( '../product/product/product.component').then( C => C.ProductComponent )
           },
         ]
       }

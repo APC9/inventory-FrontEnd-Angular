@@ -7,10 +7,13 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
+import { CategoriesEffects } from './store/categories/categories.effects';
+import { productsEffects } from './store/products/product.effects';
+
 import { categoriesReducer } from './store/categories/categories.reducer';
+import { productsReducer } from './store/products/product.reducer';
 
 import { routes } from './app.routes';
-import { CategoriesEffects } from './store/categories/categories.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,9 +23,10 @@ export const appConfig: ApplicationConfig = {
 
     /* NgRx */
     provideStore({
-      categories: categoriesReducer
+      categories: categoriesReducer,
+      products: productsReducer
     }),
-    provideEffects( CategoriesEffects ),
+    provideEffects( CategoriesEffects, productsEffects ),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
 ]
 };
