@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Subscription, filter } from 'rxjs';
 
@@ -13,6 +15,9 @@ import { loadproducts } from 'src/app/store/products/products.actions';
 
 import { SharedModule } from '../../shared/shared.module';
 import { Product } from '../../models/product.model';
+import { NewProductComponent } from '../new-product/new-product.component';
+import { loadCategories } from '../../store/categories/categories.actions';
+
 
 @Component({
   selector: 'app-product',
@@ -32,6 +37,8 @@ export class ProductComponent implements OnInit, OnDestroy{
 
   private store = inject( Store<productsState>);
   private clearSupcriptions!: Subscription;
+  private dialog = inject( MatDialog);
+  private snackBar = inject( MatSnackBar );
 
   ngOnInit(): void {
     this.clearSupcriptions = this.store.select('products')
@@ -43,12 +50,37 @@ export class ProductComponent implements OnInit, OnDestroy{
       });
 
       this.store.dispatch( loadproducts())
+      this.store.dispatch(loadCategories())
   }
 
   ngOnDestroy(): void {
     this.clearSupcriptions.unsubscribe();
   }
 
+  openProductDialog(){
+    const dialogRef = this.dialog.open( NewProductComponent, {
+      width: '450px',
+      disableClose: true
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+
+      if( result === 3 ) return;
+
+      if( result === 2 ){
+        this.openSnackBar("Error al Guardar Producto", "Error")
+        return;
+      }
+
+      this.openSnackBar("Producto Agregada", "Exitosa")
+      this.store.dispatch( loadproducts() )
+    });
+  }
+
+  private openSnackBar( msg: string, action: string ) {
+    return this.snackBar.open( msg, action,{
+      duration: 3000
+    });
+  }
 }
 

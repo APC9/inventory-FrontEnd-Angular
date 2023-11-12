@@ -22,5 +22,10 @@ export class ProductService {
   }
 
 
-
+  createProduct( product: FormData ){
+    return this.httpClient.post<ProductResponse>(`${this.baseUrl}/products`, product)
+    .pipe(
+      map( resp => resp.productResponse.products)
+    )
+  }
 }
