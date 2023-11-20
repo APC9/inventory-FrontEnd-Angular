@@ -94,9 +94,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  delete(id: number){
+  delete(category: Category){
     const dialogRef = this.dialog.open( ConfirmationComponent, {
-      data: { id },
+      data: { category },
       disableClose: true
     });
 

@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { SharedModule } from '../../../shared/shared.module';
 import { categoriesState } from '../../../store/categories/categories.reducer';
 import { deleteCategories } from '../../../store/categories/categories.actions';
+import { deleteProduct } from 'src/app/store/products/products.actions';
 
 @Component({
   standalone: true,
@@ -21,9 +22,17 @@ export class ConfirmationComponent {
 
   confirmDelete(){
     if ( this.data ){
-      this.store.dispatch( deleteCategories(this.data))
-      this.store.select('categories').subscribe( categories => {
-        categories.error? this.dialogRef.close(2) : this.dialogRef.close(1)
+      if ( this.data.category){
+        this.store.dispatch( deleteCategories({id:this.data.category.id}))
+        this.store.select('categories').subscribe( categories => {
+          categories.error? this.dialogRef.close(2) : this.dialogRef.close(1)
+        })
+        return;
+      }
+
+      this.store.dispatch( deleteProduct({id:this.data.product.id}))
+      this.store.select('products').subscribe( products => {
+        products.error? this.dialogRef.close(1) : this.dialogRef.close(2)
       })
       return;
     }

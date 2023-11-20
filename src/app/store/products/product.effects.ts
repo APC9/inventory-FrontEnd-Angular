@@ -24,4 +24,40 @@ export class productsEffects{
     )
   )
 
+  updateProduct$ = createEffect( () => this.actions$
+    .pipe(
+      ofType( productsActions.updateProduct ),
+      mergeMap( ({product, file}) => this.productService.updateProduct(product, file)
+        .pipe(
+          map( (product: Product ) => productsActions.updateProductSucces({product}) ),
+          catchError( (error)=> of( productsActions.updateProductError({ payload: error}) ))
+        )
+      )
+    )
+  )
+
+  laadProductByName$ = createEffect( () => this.actions$
+    .pipe(
+      ofType( productsActions.loadProductByName ),
+      mergeMap( ({name}) => this.productService.getProductByName(name)
+        .pipe(
+          map((product: Product ) => productsActions.loadProductByNameSucces({product}) ),
+          catchError( (error)=> of( productsActions.loadProductByNameError({ payload: error}) ))
+        )
+      )
+    )
+  )
+
+  deleteProduct$ = createEffect( () => this.actions$
+    .pipe(
+      ofType( productsActions.deleteProduct ),
+      mergeMap( ({id}) => this.productService.deleteProductById(id)
+        .pipe(
+          map( () => productsActions.deleteProductSucces({id}) ),
+          catchError( (error)=> of( productsActions.deleteProductError({ payload: error}) ))
+        )
+      )
+    )
+  )
+
 };

@@ -3,9 +3,9 @@
 
   <mat-card-header>
     <div>
-      <mat-form-field hintLabel="Buscar Productos" appearance="fill">
+      <mat-form-field [hintLabel]="!msgError? 'Buscar productos': 'Producto no encontrado'" appearance="fill">
         <mat-label>Buscar Productos</mat-label>
-        <input matInput #input />
+        <input matInput #input (keyup)="search(input.value)"/>
       </mat-form-field>
     </div>
   </mat-card-header>
@@ -74,11 +74,11 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <button mat-icon-button color="accent" > <!-- (click)="edit(element) -->
+          <button mat-icon-button color="accent" (click)="edit(element)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
 
-          <button mat-icon-button color="accent" > <!-- (click)="delete(element.id) -->
+          <button mat-icon-button color="accent" (click)="delete(element)">
             <mat-icon aria-label="Delete">delete</mat-icon>
           </button>
         </td>

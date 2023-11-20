@@ -26,6 +26,61 @@ const _productsReducer = createReducer(
     ...state,
     error: payload,
   })),
+
+  /* update */
+  on( actions.updateProduct, (state, { product }) =>{
+    const updateProducts = state.products.map( prod => prod.id === product.id ? { ...prod, ...product} : prod )
+    return{
+      ...state,
+      products: updateProducts,
+      isLoading: true
+    }
+  }),
+  on( actions.updateProductSucces, (state, { product }) =>{
+    const updateProducts =  state.products.map( prod => prod.id === product.id ? { ...prod, ...product} : prod )
+    return{
+      ...state,
+      products: updateProducts,
+      isLoading: false
+    }
+  }),
+  on( actions.updateProductError, (state, {payload}) =>({
+    ...state,
+    error: payload
+  })),
+
+  /* Load Product By Name */
+  on( actions.loadProductByName, (state, { name }) =>({
+    ...state,
+    products: state.products.filter( prod => prod.name === name),
+    isLoading: true
+  })),
+  on( actions.loadProductByNameSucces, (state, { product }) =>({
+    ...state,
+    products: [product],
+    isLoading: false,
+    error: null
+  })),
+  on( actions.loadProductByNameError, (state, {payload}) =>({
+    ...state,
+    error: payload
+  })),
+
+  /* Delete */
+  on( actions.deleteProduct, (state, { id }) =>({
+    ...state,
+    products: state.products.filter( prod => prod.id !== id),
+    isLoading: true
+  })),
+  on( actions.deleteProductSucces, (state, { id }) =>({
+    ...state,
+    products: state.products.filter( prod => prod.id !== id),
+    isLoading: false
+  })),
+  on( actions.deleteProductError, (state, {payload}) =>({
+    ...state,
+    error: payload
+  })),
 );
 
 export function productsReducer(state: productsState | undefined, action: Action) {

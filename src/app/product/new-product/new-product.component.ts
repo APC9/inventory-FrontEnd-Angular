@@ -9,6 +9,8 @@ import { categoriesState } from '../../store/categories/categories.reducer';
 import { ProductService } from '../../services/product.service';
 import { SharedModule } from '../../shared/shared.module';
 import { Category } from '../../models/category.model';
+import { Product } from '../../models/product.model';
+import { updateProduct } from 'src/app/store/products/products.actions';
 
 
 @Component({
@@ -42,12 +44,26 @@ export class NewProductComponent implements OnInit {
     })
 
     this.store.select('categories').subscribe( ({categories}) => this.categories = categories)
+
+    if( this.dialogData ){
+      this.updateForm( this.dialogData )
+    }
   }
 
 
   submit(){
     if( this.productForm.invalid ) return;
-    console.log(this.productForm.value)
+
+    if ( this.dialogData ){
+      const updateNewProduct = {
+        ...this.productForm.value,
+        id: this.dialogData.id,
+        picture: this.selectedfile
+      }
+      this.store.dispatch( updateProduct({product: updateNewProduct, file: this.selectedfile }))
+      this.dialogRef.close(1)
+      return;
+    }
 
     this.createProduct()
   }
@@ -57,24 +73,7 @@ export class NewProductComponent implements OnInit {
   }
 
   private createProduct(){
-
-    let data = {
-      name: this.productForm.get('name')?.value,
-      price: this.productForm.get('price')?.value,
-      account: this.productForm.get('account')?.value,
-      categoryId: this.productForm.get('category')?.value,
-      picture: this.selectedfile
-    }
-
-    // FormData que sera enviada en el metodo crear el product
-    const sendData = new FormData()
-    sendData.append('picture', data.picture, data.picture.name)
-    sendData.append('name', data.name)
-    sendData.append('price', data.price)
-    sendData.append('account', data.account)
-    sendData.append('categoryId', data.categoryId)
-
-    this.productService.createProduct( sendData )
+    this.productService.createProduct( this.productForm.value, this.selectedfile )
     .subscribe({
       next: () =>{
         this.dialogRef.close(1)
@@ -86,8 +85,19 @@ export class NewProductComponent implements OnInit {
     })
   }
 
+
+  updateForm(data: Product){
+    this.productForm.get('name')?.setValue(data.name)
+    this.productForm.get('price')?.setValue(data.price)
+    this.productForm.get('account')?.setValue(data.account)
+    this.productForm.get('category')?.setValue(data.category.id)
+    this.productForm.get('picture')?.setValue(this.selectedfile)
+  }
+
   onFileChanged(event: any){
     this.selectedImage = event.target.files[0].name;
     this.selectedfile = event.target.files[0];
   }
+
+
 }
