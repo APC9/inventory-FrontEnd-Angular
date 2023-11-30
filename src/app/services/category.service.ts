@@ -21,6 +21,12 @@ export class CategoryService {
     )
   }
 
+  exportToExcel(){
+    return this.httpClient.get( `${this.baseUrl}/categories/export/excel`, {
+      responseType: 'blob'
+    })
+  }
+
   createCategory(name: string, description: string){
     return  this.httpClient.post<CategoryResponse>(`${this.baseUrl}/categories`, { name, description })
       .pipe(

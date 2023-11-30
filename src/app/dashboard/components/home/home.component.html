@@ -1,2 +1,25 @@
-<p>home works!</p>
+<div class="grafico">
+  <p>Bienvenidos</p>
+
+  <div class="graficos-section">
+    <div class="chartContainer">
+      <canvas
+        baseChart
+        class="chart"
+        [options]="chartBarOptions"
+        [data]="chartBarData"
+        [type]="chartBarType"      >
+      </canvas>
+    </div>
+
+    <div class="chartContainer">
+      <canvas
+        baseChart
+        class="chart"
+        [data]="chartDoughnutData"
+        [type]="chartDoughnutType"      >
+      </canvas>
+    </div>
+  </div>
+</div>
 

@@ -1,18 +1,21 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+
 import { Subscription } from 'rxjs';
 
 import { categoriesState } from '../../store/categories/categories.reducer';
 import { loadCategories, searchCategories } from '../../store/categories/categories.actions';
+
 import { Category } from '../../interfaces/categoryResponse.interface';
 import { SharedModule } from '../../shared/shared.module';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
 import { NewCategoryComponent } from '../new-category/new-category.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationComponent } from '../../dashboard/shared/confirmation/confirmation.component';
-import { MatPaginator } from '@angular/material/paginator';
+import { CategoryService } from '../../services/category.service';
 
 
 @Component({
@@ -35,6 +38,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private clearSupcriptions!: Subscription;
   private dialog = inject( MatDialog)
   private snackBar = inject( MatSnackBar );
+  private categoriServices = inject(CategoryService);
 
   ngOnInit(): void {
     this.clearSupcriptions =  this.store.select('categories')
@@ -130,6 +134,23 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return this.snackBar.open( msg, action,{
       duration: 3000
     });
+  }
+
+  exportToExcel(){
+    this.categoriServices.exportToExcel()
+      .subscribe({
+        next: data =>  {
+          let file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})
+          let fileUrl = URL.createObjectURL(file);
+          let anchor = document.createElement("a");
+            anchor.download = "categories.xlsx"
+            anchor.href= fileUrl
+            anchor.click()
+
+          this.openSnackBar("Archivo descargado correctamente", "Exitosa")
+        },
+        error: err => console.log(err)
+      })
   }
 
 }

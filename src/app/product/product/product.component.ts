@@ -18,6 +18,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { Product } from '../../models/product.model';
 import { NewProductComponent } from '../new-product/new-product.component';
 import { ConfirmationComponent } from '../../dashboard/shared/confirmation/confirmation.component';
+import { ProductService } from '../../services/product.service';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class ProductComponent implements OnInit, OnDestroy{
   private clearSupcriptions!: Subscription;
   private dialog = inject( MatDialog);
   private snackBar = inject( MatSnackBar );
+  private productService = inject( ProductService );
 
   ngOnInit(): void {
     this.clearSupcriptions = this.store.select('products')
@@ -51,8 +53,8 @@ export class ProductComponent implements OnInit, OnDestroy{
         this.dataSource.paginator = this.paginator;
       });
 
-      this.store.dispatch( loadproducts())
-      this.store.dispatch(loadCategories())
+    this.store.dispatch( loadproducts())
+    this.store.dispatch(loadCategories())
   }
 
   ngOnDestroy(): void {
@@ -143,6 +145,24 @@ export class ProductComponent implements OnInit, OnDestroy{
     if(this.products.length === 0) {
       this.store.dispatch( loadproducts() )
     }
+  }
+
+
+  exportToExcel(){
+    this.productService.exportToExcel()
+      .subscribe({
+        next: data =>  {
+          let file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})
+          let fileUrl = URL.createObjectURL(file);
+          let anchor = document.createElement("a");
+            anchor.download = "productos.xlsx"
+            anchor.href= fileUrl
+            anchor.click()
+
+          this.openSnackBar("Archivo descargado correctamente", "Exitosa")
+        },
+        error: err => console.log(err)
+      })
   }
 }
 

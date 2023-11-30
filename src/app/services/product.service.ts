@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, tap, mergeMap, throwError } from 'rxjs';
 
 import { environment } from '../../environments/environment.development';
 import { ProductResponse } from '../interfaces/productResponse.interface';
@@ -24,7 +24,6 @@ export class ProductService {
   getProductByName( name: string ):Observable<Product>{
     return this.httpClient.get<ProductResponse>(`${this.baseUrl}/products/filter/${name}`)
     .pipe(
-      tap( resp => console.log(resp.productResponse) ),
       map( resp => resp.productResponse.products[0])
     )
   }
@@ -75,4 +74,10 @@ export class ProductService {
      return sendData;
   }
 
+
+  exportToExcel(){
+    return this.httpClient.get( `${this.baseUrl}/products/export/excel`, {
+      responseType: 'blob'
+    })
+  }
 }
